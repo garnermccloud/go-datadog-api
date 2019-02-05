@@ -86,9 +86,9 @@ func (client *Client) doJsonRequestUnredacted(method, api string,
 	}
 
 	// Perform the request and retry it if it's not a POST or PUT request
-	// post of metric series are idempotent so they are okay to retry
+	// post of metric series and checks are idempotent so they are okay to retry
 	var resp *http.Response
-	if method == "POST" || method == "PUT"  && api != "/v1/series" {
+	if method == "POST" || method == "PUT"  && api != "/v1/series" && api != "/v1/check_run" {
 		resp, err = client.HttpClient.Do(req)
 	} else {
 		resp, err = client.doRequestWithRetries(req, client.RetryTimeout)
